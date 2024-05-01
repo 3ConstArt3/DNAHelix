@@ -1,4 +1,4 @@
-DNAHelix helix;
+Helix dna;
 
 void setup()
 {
@@ -13,14 +13,14 @@ void setup()
 
 void createHelix()
 {
-  var size = 390;
-  helix = new DNAHelix(size);
+  var size = 420;
+  dna = new Helix(size);
 }
 
 void draw()
 {
   background(0);
 
-  helix.spin();
-  helix.show();
+  dna.spin();
+  dna.render();
 }
