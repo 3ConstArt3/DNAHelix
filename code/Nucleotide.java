@@ -7,11 +7,12 @@ class Nucleotide
   private color fillColor;
 
   /* Constructor definition */
-  public Nucleotide(PVector position, float radius, color fillColor)
+  public Nucleotide(PVector position, float radius,
+    color fillColor)
   {
     this.position = position;
     this.radius = radius;
-    
+
     this.fillColor = fillColor;
   }
 
@@ -21,12 +22,12 @@ class Nucleotide
     this.position = position;
   }
 
-  public void show()
+  public void render()
   {
     pushMatrix();
     translate(this.position.x, this.position.y);
 
-    stroke(this.fillColor);
+    noStroke();
     fill(this.fillColor);
     circle(0, 0, this.radius);
     popMatrix();
