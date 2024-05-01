@@ -1,2 +1,2 @@
 # DNAHelix
-This is a graphical program, made to simulate the molecular DNA helix.
+This is a graphical program, made with the Processing IDE, in order to simulate the molecular DNA helix.
