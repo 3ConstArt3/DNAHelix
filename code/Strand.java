@@ -1,7 +1,7 @@
 class Strand
 {
 
-  private PVector vertices;
+  private PVector bounds;
 
   private float phase;
   private float amplitude;
@@ -11,82 +11,78 @@ class Strand
   private float pointSpacing;
   private float deltaPhase;
 
-  private color strandColor;
   private ArrayList<Nucleotide> nucleotides;
 
   /* Constructor definition */
-  public Strand(float size, float phase, float amplitude,
-                float frequency, int precision, color strandColor)
+  public Strand(float size, float phase, color strandColor)
   {
     var start = (width - size) / 2;
     var end = start + size;
-    this.vertices = new PVector(start, end);
+    this.bounds = new PVector(start, end);
 
     this.phase = phase;
-    this.amplitude = amplitude;
-    this.frequency = frequency;
+    this.amplitude = 0.096 * height;
+    this.frequency = PI / 600;
 
-    this.precision = precision;
-    this.pointSpacing = (this.precision > 0 ? width / this.precision : 0);
+    this.precision = 123;
+    this.pointSpacing = width / this.precision;
     this.deltaPhase = PI / 120;
 
-    this.strandColor = color(strandColor);
-    this.createStrand();
+    this.createStrand(strandColor);
   }
 
   /* Function definition */
-  private void createStrand()
+  private void createStrand(color strandColor)
   {
     this.nucleotides = new ArrayList<Nucleotide>();
 
-    var start = this.vertices.x;
-    var end = this.vertices.y;
-    for (float x = start; x < end; x += this.pointSpacing)
+    for (float x = this.bounds.x; x < this.bounds.y; x += this.pointSpacing)
     {
       var currentPhase = (this.phase + this.deltaPhase);
       var theta = currentPhase + TAU * x * this.frequency;
-      var y = map(sin(theta), -1, 1, -this.amplitude, this.amplitude);
 
-      var position = new PVector(x, y);
+      var posX = x;
+      var posY = map(sin(theta), -1, 1, -this.amplitude, this.amplitude);
+      var position = new PVector(posX, posY);
       var radius = 9;
-      var fillColor = this.strandColor;
 
-      this.nucleotides.add(new Nucleotide(position, radius, fillColor));
+      this.nucleotides.add(new Nucleotide(position, radius, strandColor));
     }
   }
 
   public void spin()
   {
-    this.updateNucleotides();
-    this.phase += this.deltaPhase;
+    if (this.nucleotides != null)
+    {
+      this.updateNucleotides();
+      this.phase += this.deltaPhase;
+    }
   }
 
   private void updateNucleotides()
   {
-    var start = this.vertices.x;
-    var end = this.vertices.y;
     var p = 0;
-
-    for (float x = start; x < end; x += this.pointSpacing)
+    for (float x = this.bounds.x; x < this.bounds.y; x += this.pointSpacing)
     {
       var currentPhase = (this.phase + this.deltaPhase);
       var theta = currentPhase + TAU * x * this.frequency;
-      var y = map(sin(theta), -1, 1, -this.amplitude, this.amplitude);
 
-      var position = new PVector(x, y);
+      var posX = x;
+      var posY = map(sin(theta), -1, 1, -this.amplitude, this.amplitude);
+      var position = new PVector(posX, posY);
       var nucleotide = this.nucleotides.get(p);
-      nucleotide.spin(position);
 
+      nucleotide.spin(position);
       p++;
     }
   }
 
-  public void show()
+  public void render()
   {
-    if (this.nucleotides != null && !this.nucleotides.isEmpty())
+    if (this.nucleotides != null)
     {
       for (var nucleotide : this.nucleotides)
-        nucleotide.show();
+        nucleotide.render();
     }
   }
 }
